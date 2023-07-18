@@ -8,25 +8,32 @@ const {
 } = process.env
 const stripe = require("stripe")(REACT_APP_STRIPE_SECRET)
 
-// Test payment
-router.post('/createPayment', async (req, res, next) => {
+router.post('/create-checkout-session', async (req, res, next) => {
     try {
-        const paymentIntent = await stripe.paymentIntents.create({
-            currency: "EUR",
-            amount: 1999,
-            automatic_payment_methods: { enabled: true },
+        const { items } = req.body
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            mode: "payment",
+            line_items: items.map(item => {
+                const { name, priceInCents, quantity } = item
+                return {
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name,
+                        },
+                        unit_amount: priceInCents,
+                    },
+                    quantity,
+                }
+            }),
+            success_url: `${process.env.REACT_APP_URL}/successPayment`,
+            cancel_url: `${process.env.REACT_APP_URL}/checkout`,
         })
-
-        // Send publishable key and PaymentIntent details to client
-        res.json({
-            secret: paymentIntent.client_secret,
-        })
+        res.json({ url: session.url })
     } catch (e) {
-        return res.status(400).send({
-            error: {
-                message: e.message,
-            },
-        })
+        console.log(e)
+        res.status(500).json({ error: e.message })
     }
 })
 
