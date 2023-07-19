@@ -1,6 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
+const { Order } = require('../db/models')
+const {
+    transporter,
+    sendWelcomeEmail,
+    sendPurchaseEmail
+} = require('../helpers/mailer')
 dotenv.config()
 const {
     REACT_APP_STRIPE_SECRET,
@@ -10,17 +16,21 @@ const stripe = require("stripe")(REACT_APP_STRIPE_SECRET)
 
 router.post('/create-checkout-session', async (req, res, next) => {
     try {
-        const { items } = req.body
+        const { items, locale, rawData } = req.body
         const session = await stripe.checkout.sessions.create({
+            locale,
             payment_method_types: ["card"],
             mode: "payment",
             line_items: items.map(item => {
-                const { name, priceInCents, quantity } = item
+                const { name, priceInCents, quantity, image, description } = item
                 return {
                     price_data: {
                         currency: "usd",
                         product_data: {
                             name,
+                            description,
+                            images: [image],
+                            // metadata: { ...item }
                         },
                         unit_amount: priceInCents,
                     },
@@ -30,9 +40,15 @@ router.post('/create-checkout-session', async (req, res, next) => {
             success_url: `${process.env.REACT_APP_URL}/successPayment`,
             cancel_url: `${process.env.REACT_APP_URL}/checkout`,
         })
-        res.json({ url: session.url })
-    } catch (e) {
-        console.log(e)
+
+        if (session && session.url) {
+            const order = await Order.create({ ...items[0], ...rawData })
+            const email = await sendPurchaseEmail(items[0].username, { ...items[0], rawData }, items[0].email)
+            if (order && email) res.json({ url: session.url })
+            res.json({ url: 'https://angelita.vercel.app/checkoutError' })
+        }
+    } catch (err) {
+        console.log(err)
         res.status(500).json({ error: e.message })
     }
 })
