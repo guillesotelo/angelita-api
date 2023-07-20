@@ -50,7 +50,7 @@ router.post('/create-checkout-session', async (req, res, next) => {
             cancel_url: `${process.env.REACT_APP_URL}/checkout`,
         })
 
-        if (order && session && session.url) res.json({ url: session.url })
+        if (order && session && session.url) return res.json({ url: session.url })
         
         res.json({ url: 'https://angelita.vercel.app/checkoutError' })
     } catch (err) {
