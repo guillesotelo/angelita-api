@@ -644,13 +644,13 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
       <td style="overflow-wrap:break-word;word-break:break-word;padding:40px 40px 30px;font-family:'Lato',sans-serif;" align="left">
         
   <div style="font-weight: 400; line-height: 140%; text-align: left; word-wrap: break-word;">
-<p style="font-size: 22px; line-height: 140%;">Hola${fullName ? ', ' + fullName.split(' ')[0] : ''}, gracias por tu compra.</p>
-<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 16px; line-height: 25.2px; color: #666666;">Estos son los datos de tu reserva:</span></p>
+<p style="font-size: 22px; line-height: 140%;">Hola${fullName ? ', ' + fullName.split(' ')[0] : ''}. Gracias por tu compra.</p>
+<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 20px; line-height: 25.2px; color: #666666; margin-top: 1rem;">Estos son los datos de tu reserva:</span></p>
 <p style="font-size: 14px; line-height: 140%;"> </p>
 <p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Servicio:</strong> ${data.name || ''}</span></span></p>
-<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Fecha${data.date?.includes(',') ? 's' : ''}:</strong> ${(data.date || '')} (${data.rawData?.time})</span></span></p>
+<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Fecha${data.date?.includes(',') ? 's' : ''}:</strong> ${(data.date || '')} (${data.selectedTime || data.time})</span></span></p>
 <p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;">${(data.description || '')}</span></span></p>
-<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Total:</strong> ${(parseInt(data.priceInCents || 0, 10) / 100).toFixed(2)}</span></span></p>
+<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Total:</strong> US $${(parseInt(data.priceInCents || 0, 10) / 100).toFixed(2)}</span></span></p>
   </div>
 
       </td>

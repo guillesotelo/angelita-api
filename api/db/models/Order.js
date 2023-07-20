@@ -61,6 +61,10 @@ const orderSchema = new mongoose.Schema({
     selectedTime: {
         type: String
     },
+    isPaid: {
+        type: Boolean,
+        default: false
+    },
 }, { timestamps: true })
 
 const Order = mongoose.model('Order', orderSchema)
