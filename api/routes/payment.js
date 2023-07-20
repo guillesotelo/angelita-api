@@ -16,13 +16,19 @@ const stripe = require("stripe")(REACT_APP_STRIPE_SECRET)
 
 router.post('/create-checkout-session', async (req, res, next) => {
     try {
-        const { items, locale, rawData } = req.body
+        const { items, locale } = req.body
         const session = await stripe.checkout.sessions.create({
             locale,
             payment_method_types: ["card"],
             mode: "payment",
             line_items: items.map(item => {
-                const { name, priceInCents, quantity, image, description } = item
+                const {
+                    name,
+                    priceInCents,
+                    quantity,
+                    image,
+                    description
+                } = item
                 return {
                     price_data: {
                         currency: "usd",
@@ -42,8 +48,10 @@ router.post('/create-checkout-session', async (req, res, next) => {
         })
 
         if (session && session.url) {
+            const { rawData } = items[0]
             const order = await Order.create({ ...items[0], ...rawData })
-            const email = await sendPurchaseEmail(items[0].username, { ...items[0], rawData }, items[0].email)
+            // sendEmailOrderReceived
+            // const email = await sendPurchaseEmail(items[0].username, { ...items[0], rawData }, items[0].email)
             if (order && email) res.json({ url: session.url })
             res.json({ url: 'https://angelita.vercel.app/checkoutError' })
         }
