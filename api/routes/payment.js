@@ -2,11 +2,7 @@ const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
 const { Order } = require('../db/models')
-const {
-    transporter,
-    sendWelcomeEmail,
-    sendPurchaseEmail
-} = require('../helpers/mailer')
+const { sendPurchaseEmail } = require('../helpers/mailer')
 dotenv.config()
 const {
     REACT_APP_STRIPE_SECRET,
@@ -51,7 +47,7 @@ router.post('/create-checkout-session', async (req, res, next) => {
         })
 
         if (order && session && session.url) return res.json({ url: session.url })
-        
+
         res.json({ url: 'https://angelita.vercel.app/checkoutError' })
     } catch (err) {
         console.log(err)
