@@ -62,8 +62,7 @@ router.post('/confirmPayment', async (req, res, next) => {
         if (!order) res.status(404).json({ error: 'Error updating order' })
 
         const { username, email } = order
-        const emailSent = await sendPurchaseEmail(username, order, email)
-        if (!emailSent) return res.status(404).json({ error: 'Error sending confirmation email' })
+        await sendPurchaseEmail(username, order, email)
 
         res.json(order)
     } catch (err) {

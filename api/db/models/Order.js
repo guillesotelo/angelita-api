@@ -58,6 +58,12 @@ const orderSchema = new mongoose.Schema({
     date: {
         type: String
     },
+    dateObject: {
+        type: String
+    },
+    dateObjects: {
+        type: String
+    },
     selectedTime: {
         type: String
     },
