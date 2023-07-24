@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
 const { Order } = require('../db/models')
-const { sendPurchaseEmail } = require('../helpers/mailer')
+const { sendBookingUpdateEmail } = require('../helpers/mailer')
 
 //Get all bookings
 router.get('/getAll', async (req, res, next) => {
@@ -53,7 +53,8 @@ router.post('/update', async (req, res, next) => {
         const updated = await Order.findByIdAndUpdate(_id, bookingData, { returnDocument: "after", useFindAndModify: false })
         if (!updated) return res.status(404).send('Error updating Order.')
 
-        await sendPurchaseEmail(username, updated, email)
+        const { username, email } = updated
+        await sendBookingUpdateEmail(username, updated, email)
 
         res.status(200).json(updated)
     } catch (err) {
