@@ -1,7 +1,3 @@
-const welcomeEmail = (fullName, username, password) => `
-
-`
-
 const purchaseEmail = (data, fullName) => `
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -248,8 +244,8 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
 <p style="font-size: 14px; line-height: 140%;"><p style="font-size: 20px; line-height: 25.2px; color: #666666; margin-top: 2rem;">Estos son los datos de tu reserva:</p></p>
 <p style="font-size: 14px; line-height: 140%;"> </p>
 <p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Servicio:</strong> ${data.name || ''}</span></span></p>
-<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Fecha${data.date?.includes(',') ? 's' : ''}:</strong> ${(data.date || '')} (${data.selectedTime || data.time})</span></span></p>
-<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;">${(data.description || '')}</span></span></p>
+<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Fecha y hora:</strong> ${(data.date || '')}${data.fixedTime ? ' - (' + data.time + ')' : ''}</span></span></p>
+<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;">${(data.description ? '<strong>Información adicional:</strong> ' + data.description : '')}</span></span></p>
 <p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Total:</strong> US $${(parseInt(data.priceInCents || 0, 10) / 100).toFixed(2)}</span></span></p>
   </div>
 
@@ -614,8 +610,8 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
 <p style="font-size: 14px; line-height: 140%;"><p style="font-size: 20px; line-height: 25.2px; color: #666666; margin-top: 2rem;">Estos son los nuevos datos de tu reserva:</p></p>
 <p style="font-size: 14px; line-height: 140%;"> </p>
 <p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Servicio:</strong> ${data.name || ''}</span></span></p>
-<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Fecha${data.date?.includes(',') ? 's' : ''}:</strong> ${(data.date || '')} (${data.selectedTime || data.time})</span></span></p>
-<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;">${(data.description || '')}</span></span></p>
+<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Fecha y hora:</strong> ${(data.date || '')}${data.fixedTime ? ' - (' + data.time + ')' : ''}</span></span></p>
+<p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;">${(data.description ? '<strong>Información adicional:</strong> ' + data.description : '')}</span></span></p>
 <p style="line-height: 140%;"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Total:</strong> US $${(parseInt(data.priceInCents || 0, 10) / 100).toFixed(2)}</span></span></p>
   </div>
 
@@ -734,23 +730,7 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
 </html>
 `
 
-const userUpdateEmail = (fullName, username, password) => `
-
-`
-
-const passwordUpdateEmail = (fullName, encryptedEmail) => `
-
-`
-
-const resetPasswordEmail = (fullName, encryptedEmail) => `
-
-`
-
 module.exports = {
-  welcomeEmail,
   purchaseEmail,
-  userUpdateEmail,
-  passwordUpdateEmail,
-  resetPasswordEmail,
-  bookingUpdateEmail
+  bookingUpdateEmail,
 }

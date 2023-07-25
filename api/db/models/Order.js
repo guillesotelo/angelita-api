@@ -71,6 +71,15 @@ const orderSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    fixedTime: {
+        type: Boolean
+    },
+    startTime: {
+        type: Number
+    },
+    endTime: {
+        type: Number
+    },
 }, { timestamps: true })
 
 const Order = mongoose.model('Order', orderSchema)

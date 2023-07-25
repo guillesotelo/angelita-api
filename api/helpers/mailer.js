@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { welcomeEmail, purchaseEmail, bookingUpdateEmail, userUpdateEmail, passwordUpdateEmail, resetPasswordEmail } = require('./emailTemplates');
+const { purchaseEmail, bookingUpdateEmail } = require('./emailTemplates');
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -16,16 +16,6 @@ transporter.verify().then(() => {
   console.log("* Mailing ready *")
 })
 
-const sendWelcomeEmail = async (username, password, to) => {
-  await transporter.sendMail({
-    from: `"ANGELITA" <${process.env.EMAIL}>`,
-    to,
-    subject: `Gracias por ser parte`,
-    html: welcomeEmail(username, to, password)
-  }).catch((err) => {
-    console.error('Something went wrong!', err)
-  })
-}
 
 const sendPurchaseEmail = async (username, data, to) => {
   await transporter.sendMail({
@@ -49,45 +39,9 @@ const sendBookingUpdateEmail = async (username, data, to) => {
   })
 }
 
-const sendDataUpdateEmail = async (username, password, to) => {
-  await transporter.sendMail({
-    from: `"ANGELITA" <${process.env.EMAIL}>`,
-    to,
-    subject: `Tus datos fueron actualizados`,
-    html: userUpdateEmail(username, to, password)
-  }).catch((err) => {
-    console.error('Something went wrong!', err)
-  })
-}
-
-const sendPasswordUpdateEmail = async (username, encryptedEmail, to) => {
-  await transporter.sendMail({
-    from: `"ANGELITA" <${process.env.EMAIL}>`,
-    to,
-    subject: `Tu contraseña fué actualizada`,
-    html: passwordUpdateEmail(username, encryptedEmail)
-  }).catch((err) => {
-    console.error('Something went wrong!', err)
-  })
-}
-
-const sendPasswordResetEmail = async (username, encryptedEmail, to) => {
-  await transporter.sendMail({
-    from: `"ANGELITA" <${process.env.EMAIL}>`,
-    to,
-    subject: `Actualización de contraseña`,
-    html: resetPasswordEmail(username, encryptedEmail)
-  }).catch((err) => {
-    console.error('Something went wrong!', err)
-  })
-}
 
 module.exports = {
   transporter,
-  sendWelcomeEmail,
   sendPurchaseEmail,
-  sendDataUpdateEmail,
-  sendPasswordUpdateEmail,
-  sendPasswordResetEmail,
   sendBookingUpdateEmail
 };
