@@ -45,6 +45,23 @@ router.post('/login', async (req, res, next) => {
     }
 })
 
+// Verify user token
+router.post('/verify', async (req, res, next) => {
+    try {
+        const bearerHeader = req.headers['authorization']
+        if (bearerHeader) {
+            const bearerToken = bearerHeader.split(' ')[1]
+            jwt.verify(bearerToken, JWT_SECRET, (error, _) => {
+                if (error) return res.sendStatus(403)
+                res.status(200).json({ token: bearerToken })
+            })
+        } else res.status(403)
+    } catch (err) {
+        console.error('Something went wrong!', err)
+        res.status(500).send('Server Error')
+    }
+})
+
 //Create new user / register
 router.post('/create', async (req, res, next) => {
     try {
@@ -59,7 +76,7 @@ router.post('/create', async (req, res, next) => {
         res.status(201).send(`User created successfully`)
     } catch (err) {
         console.error('Something went wrong!', err)
-        res.send(500).send('Server Error')
+        res.status(500).send('Server Error')
     }
 })
 
@@ -76,7 +93,7 @@ router.post('/update', verifyToken, async (req, res, next) => {
         res.status(200).json({ ...newUser._doc, token })
     } catch (err) {
         console.error('Something went wrong!', err)
-        return res.send(500).send('Server Error')
+        return res.status(500).send('Server Error')
     }
 })
 
@@ -89,12 +106,12 @@ router.post('/remove', verifyToken, async (req, res, next) => {
         if (!user) return res.status(401).send('User not found')
 
         const removed = await User.deleteOne({ email })
-        if(!removed) return res.status(404).send('Error deleting user')
+        if (!removed) return res.status(404).send('Error deleting user')
 
         res.status(200).send('User removed successfully')
     } catch (err) {
         console.error('Something went wrong!', err)
-        res.send(500).send('Server Error')
+        res.status(500).send('Server Error')
     }
 })
 
