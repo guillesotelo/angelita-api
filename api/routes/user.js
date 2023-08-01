@@ -55,7 +55,7 @@ router.post('/verify', async (req, res, next) => {
                 if (error) return res.sendStatus(403)
                 res.status(200).json({ token: bearerToken })
             })
-        } else res.status(403)
+        } else res.status(403).json({})
     } catch (err) {
         console.error('Something went wrong!', err)
         res.status(500).send('Server Error')
