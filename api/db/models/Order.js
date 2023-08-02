@@ -10,6 +10,9 @@ const orderSchema = new mongoose.Schema({
     currency: {
         type: String
     },
+    discount: {
+        type: String
+    },
     type: {
         type: String
     },
@@ -52,6 +55,9 @@ const orderSchema = new mongoose.Schema({
     image: {
         type: String
     },
+    imageUrl: {
+        type: String
+    },
     description: {
         type: String
     },
@@ -79,6 +85,16 @@ const orderSchema = new mongoose.Schema({
     },
     endTime: {
         type: Number
+    },
+    isEvent: {
+        type: Boolean
+    },
+    otherData: {
+        type: String
+    },
+    removed: {
+        type: Boolean,
+        default: false
     },
 }, { timestamps: true })
 

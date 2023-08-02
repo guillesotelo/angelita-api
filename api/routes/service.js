@@ -1,60 +1,56 @@
 const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
-const { Order } = require('../db/models')
-const { sendBookingUpdateEmail } = require('../helpers/mailer')
+const { Service } = require('../db/models')
 
-//Get all bookings
+//Get all services
 router.get('/getAll', async (req, res, next) => {
     try {
-        const bookings = await Order.find({ removed: false }).sort({ createdAt: -1 })
-        if (!bookings) return res.status(404).send('No bookings found.')
+        const services = await Service.find({ removed: false }).sort({ createdAt: -1 })
+        if (!services) return res.status(404).send('No services found.')
 
-        res.status(200).json(bookings)
+        res.status(200).json(services)
     } catch (err) {
         console.error('Something went wrong!', err)
         res.send(500).send('Server Error')
     }
 })
 
-//Get booking by ID
+//Get service by ID
 router.get('/getById', async (req, res, next) => {
     try {
         const { _id } = req.query
-        const booking = await Order.findById(_id)
-        if (!booking) return res.status(404).send('Post not found.')
+        const service = await Service.findById(_id)
+        if (!service) return res.status(404).send('Post not found.')
 
-        res.status(200).json(booking)
+        res.status(200).json(service)
     } catch (err) {
         console.error('Something went wrong!', err)
         res.send(500).send('Server Error')
     }
 })
 
-//Create new booking
+//Create new service
 router.post('/create', async (req, res, next) => {
     try {
-        const newBooking = await Order.create(req.body)
-        if (!newBooking) return res.status(400).json('Error creating post')
+        const newservice = await Service.create(req.body)
+        if (!newservice) return res.status(400).json('Error creating post')
 
-        res.status(200).json(newBooking)
+        res.status(200).json(newservice)
     } catch (err) {
         console.error('Something went wrong!', err)
         res.send(500).send('Server Error')
     }
 })
 
-//Update booking Data
+//Update service Data
 router.post('/update', async (req, res, next) => {
     try {
         const { _id } = req.body
-        let bookingData = { ...req.body }
+        let serviceData = { ...req.body }
 
-        const updated = await Order.findByIdAndUpdate(_id, bookingData, { returnDocument: "after", useFindAndModify: false })
-        if (!updated) return res.status(404).send('Error updating Order.')
-
-        const { username, email } = updated
-        await sendBookingUpdateEmail(username, updated, email)
+        const updated = await Service.findByIdAndUpdate(_id, serviceData, { returnDocument: "after", useFindAndModify: false })
+        if (!updated) return res.status(404).send('Error updating Service.')
 
         res.status(200).json(updated)
     } catch (err) {
@@ -63,12 +59,12 @@ router.post('/update', async (req, res, next) => {
     }
 })
 
-//Update booking Data
+//Update service Data
 router.post('/remove', async (req, res, next) => {
     try {
         const { _id } = req.body
 
-        const deleted = await Order.findByIdAndUpdate(_id, { removed: true }, { returnDocument: "after", useFindAndModify: false })
+        const deleted = await Service.findByIdAndUpdate(_id, { removed: true }, { returnDocument: "after", useFindAndModify: false })
 
         res.status(200).json(deleted)
     } catch (err) {

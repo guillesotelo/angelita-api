@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const eventSchema = new mongoose.Schema({
+const serviceSchema = new mongoose.Schema({
     name: {
         type: String
     },
@@ -47,12 +47,16 @@ const eventSchema = new mongoose.Schema({
         type: String
     },
     fixedTime: {
-        type: Boolean,
-        default: true
+        type: Boolean
+    },
+    startTime: {
+        type: Number
+    },
+    endTime: {
+        type: Number
     },
     isEvent: {
-        type: Boolean,
-        default: true
+        type: Boolean
     },
     otherData: {
         type: String
@@ -63,6 +67,6 @@ const eventSchema = new mongoose.Schema({
     },
 }, { timestamps: true })
 
-const Event = mongoose.model('Event', eventSchema)
+const Service = mongoose.model('Service', serviceSchema)
 
-module.exports = Event
+module.exports = Service
