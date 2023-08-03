@@ -61,6 +61,14 @@ router.post('/confirmPayment', async (req, res, next) => {
         const order = await Order.findByIdAndUpdate(_id, { isPaid: true }, { returnDocument: "after", useFindAndModify: false })
         if (!order) res.status(404).json({ error: 'Error updating order' })
 
+        if (order.isEvent) {
+            const event = await Event.find({ serviceId: order.serviceId })
+            if (event) {
+                await Event.findByIdAndUpdate(event._id,
+                    { participants: event.participants + 1 },
+                    { returnDocument: "after", useFindAndModify: false })
+            }
+        }
         const { username, email } = order
         await sendPurchaseEmail(username, order, email)
 

@@ -38,6 +38,10 @@ const eventSchema = new mongoose.Schema({
     linkPassword: {
         type: String
     },
+    participants: {
+        type: Number,
+        default: 1
+    },
     otherData: {
         type: String
     },
