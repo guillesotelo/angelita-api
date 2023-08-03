@@ -7,7 +7,12 @@ const { sendBookingUpdateEmail } = require('../helpers/mailer')
 //Get all bookings
 router.get('/getAll', async (req, res, next) => {
     try {
-        const bookings = await Order.find({ removed: false }).sort({ createdAt: -1 })
+        const bookings = await Order.find({
+            $or: [
+                { removed: false },
+                { removed: { $exists: false } }
+            ]
+        }).sort({ createdAt: -1 })
         if (!bookings) return res.status(404).send('No bookings found.')
 
         res.status(200).json(bookings)

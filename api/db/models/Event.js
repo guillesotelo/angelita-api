@@ -4,6 +4,12 @@ const eventSchema = new mongoose.Schema({
     name: {
         type: String
     },
+    service: {
+        type: String
+    },
+    serviceId: {
+        type: String
+    },
     price: {
         type: Number
     },
@@ -13,46 +19,24 @@ const eventSchema = new mongoose.Schema({
     discount: {
         type: String
     },
-    type: {
-        type: String
-    },
-    duration: {
-        type: Number
-    },
-    mark: {
-        type: String
-    },
-    day: {
-        type: String
-    },
-    time: {
-        type: String
-    },
-    image: {
-        type: String
-    },
     imageUrl: {
         type: String
     },
     description: {
         type: String
     },
-    date: {
-        type: String
-    },
     dateObject: {
         type: String
     },
-    dateObjects: {
+    isVirtual: {
+        type: Boolean,
+        default: true
+    },
+    link: {
         type: String
     },
-    fixedTime: {
-        type: Boolean,
-        default: true
-    },
-    isEvent: {
-        type: Boolean,
-        default: true
+    linkPassword: {
+        type: String
     },
     otherData: {
         type: String

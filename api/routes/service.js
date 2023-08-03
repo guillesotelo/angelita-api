@@ -6,7 +6,12 @@ const { Service } = require('../db/models')
 //Get all services
 router.get('/getAll', async (req, res, next) => {
     try {
-        const services = await Service.find({ removed: false }).sort({ createdAt: -1 })
+        const services = await Service.find({
+            $or: [
+                { removed: false },
+                { removed: { $exists: false } }
+            ]
+        }).sort({ createdAt: -1 })
         if (!services) return res.status(404).send('No services found.')
 
         res.status(200).json(services)

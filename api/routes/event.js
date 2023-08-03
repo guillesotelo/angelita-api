@@ -6,7 +6,12 @@ const { Event } = require('../db/models')
 //Get all events
 router.get('/getAll', async (req, res, next) => {
     try {
-        const events = await Event.find({ removed: false }).sort({ createdAt: -1 })
+        const events = await Event.find({
+            $or: [
+                { removed: false },
+                { removed: { $exists: false } }
+            ]
+        }).sort({ createdAt: -1 })
         if (!events) return res.status(404).send('No events found.')
 
         res.status(200).json(events)
