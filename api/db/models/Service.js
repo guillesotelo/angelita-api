@@ -58,6 +58,12 @@ const serviceSchema = new mongoose.Schema({
     isEvent: {
         type: Boolean
     },
+    link: {
+        type: Boolean
+    },
+    linkPassword: {
+        type: Boolean
+    },
     otherData: {
         type: String
     },
