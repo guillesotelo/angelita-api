@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
-const { Order } = require('../db/models')
+const { Order, MailList } = require('../db/models')
 const { sendBookingUpdateEmail } = require('../helpers/mailer')
 
 //Get all bookings
@@ -41,6 +41,8 @@ router.post('/create', async (req, res, next) => {
     try {
         const newBooking = await Order.create(req.body)
         if (!newBooking) return res.status(400).json('Error creating post')
+        
+        await MailList.create(req.body)
 
         res.status(200).json(newBooking)
     } catch (err) {

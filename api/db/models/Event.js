@@ -28,6 +28,15 @@ const eventSchema = new mongoose.Schema({
     dateObject: {
         type: String
     },
+    date: {
+        type: String
+    },
+    endTime: {
+        type: String
+    },
+    duration: {
+        type: Number
+    },
     isVirtual: {
         type: Boolean,
         default: true

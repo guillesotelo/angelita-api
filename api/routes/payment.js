@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
-const { Order } = require('../db/models')
+const { Order, MailList } = require('../db/models')
 const { sendPurchaseEmail } = require('../helpers/mailer')
 dotenv.config()
 const {
@@ -15,7 +15,7 @@ router.post('/create-checkout-session', async (req, res, next) => {
         const { items, locale } = req.body
         const { rawData } = items[0]
         const order = await Order.create({ ...items[0], ...rawData })
-
+        
         const session = await stripe.checkout.sessions.create({
             locale,
             payment_method_types: ["card"],
@@ -60,6 +60,8 @@ router.post('/confirmPayment', async (req, res, next) => {
         const { _id } = req.body
         const order = await Order.findByIdAndUpdate(_id, { isPaid: true }, { returnDocument: "after", useFindAndModify: false })
         if (!order) res.status(404).json({ error: 'Error updating order' })
+        
+        await MailList.create(req.body)
 
         if (order.isEvent) {
             const event = await Event.find({ serviceId: order.serviceId })

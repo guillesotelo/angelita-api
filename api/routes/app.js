@@ -1,8 +1,8 @@
 const dotenv = require('dotenv')
 const express = require('express')
 const router = express.Router()
-const { Subscription } = require('../db/models')
-const transporter = require('../helpers/mailer')
+const { Subscription, MailList } = require('../db/models')
+const { sendContactEmail } = require('../helpers/mailer')
 const { encrypt, decrypt } = require('../helpers')
 const { REACT_APP_URL } = process.env
 const jwt = require('jsonwebtoken')
@@ -18,15 +18,29 @@ router.post('/subscribe', async (req, res, next) => {
 
         const newSubscription = await Subscription.create(req.body)
         if (!newSubscription) return res.status(400).send('Bad request')
+        
+        await MailList.create(req.body)
 
         res.status(201).send(`Subscribed successfully`)
     } catch (err) {
         console.error('Something went wrong!', err)
-        res.send(500).send('Server Error')
+        res.status(500).send('Server Error')
     }
 })
 
-//New subscription
+//Send Contact Email
+router.post('/sendContactEmail', async (req, res, next) => {
+    try {
+        await sendContactEmail('Angelita', req.body, 'guille.sotelo.cloud@gmail.com')
+        await MailList.create(req.body)
+        res.status(201).json({ message: 'ok' })
+    } catch (err) {
+        console.error('Something went wrong!', err)
+        res.status(500).send('Server Error')
+    }
+})
+
+//Cancel subscription
 router.post('/cancelSubscription', async (req, res, next) => {
     try {
         const emailRegistered = await Subscription.findOne({ email }).exec()
@@ -38,7 +52,7 @@ router.post('/cancelSubscription', async (req, res, next) => {
         res.status(201).send(`Unsubscribed successfully`)
     } catch (err) {
         console.error('Something went wrong!', err)
-        res.send(500).send('Server Error')
+        res.status(500).send('Server Error')
     }
 })
 

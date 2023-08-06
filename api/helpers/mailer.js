@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { purchaseEmail, bookingUpdateEmail } = require('./emailTemplates');
+const { purchaseEmail, bookingUpdateEmail, contactEmail } = require('./emailTemplates');
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -39,9 +39,21 @@ const sendBookingUpdateEmail = async (username, data, to) => {
   })
 }
 
+const sendContactEmail = async (username, data, to) => {
+  await transporter.sendMail({
+    from: `"ANGELITA" <${process.env.EMAIL}>`,
+    to,
+    subject: `Tienes un nuevo mensaje`,
+    html: contactEmail(data, username)
+  }).catch((err) => {
+    console.error('Something went wrong!', err)
+  })
+}
+
 
 module.exports = {
   transporter,
   sendPurchaseEmail,
-  sendBookingUpdateEmail
+  sendBookingUpdateEmail,
+  sendContactEmail,
 };
