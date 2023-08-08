@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
 const { Order, MailList } = require('../db/models')
-const { sendPurchaseEmail } = require('../helpers/mailer')
+const { sendPurchaseEmail, sendPurchaseCoachingEmail } = require('../helpers/mailer')
 dotenv.config()
 const {
     REACT_APP_STRIPE_SECRET,
@@ -15,7 +15,7 @@ router.post('/create-checkout-session', async (req, res, next) => {
         const { items, locale } = req.body
         const { rawData } = items[0]
         const order = await Order.create({ ...items[0], ...rawData })
-        
+
         const session = await stripe.checkout.sessions.create({
             locale,
             payment_method_types: ["card"],
@@ -58,10 +58,14 @@ router.post('/create-checkout-session', async (req, res, next) => {
 router.post('/confirmPayment', async (req, res, next) => {
     try {
         const { _id } = req.body
-        const order = await Order.findByIdAndUpdate(_id, { isPaid: true }, { returnDocument: "after", useFindAndModify: false })
-        if (!order) res.status(404).json({ error: 'Error updating order' })
-        
-        await MailList.create(req.body)
+        const order = await Order.findById(_id)
+
+        if (order && !order.isPaid) {
+            await Order.findByIdAndUpdate(_id, { isPaid: true }, { returnDocument: "after", useFindAndModify: false })
+            if (!order) res.status(404).json({ error: 'Error updating order' })
+
+            await MailList.create(order)
+        }
 
         if (order.isEvent) {
             const event = await Event.find({ serviceId: order.serviceId })
@@ -71,8 +75,9 @@ router.post('/confirmPayment', async (req, res, next) => {
                     { returnDocument: "after", useFindAndModify: false })
             }
         }
-        const { username, email } = order
-        await sendPurchaseEmail(username, order, email)
+        const { username, email, name } = order
+        if (name === 'Coaching') await sendPurchaseCoachingEmail(username, order, email)
+        else await sendPurchaseEmail(username, order, email)
 
         res.json(order)
     } catch (err) {

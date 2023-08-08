@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 
 const orderSchema = new mongoose.Schema({
+    serviceId: {
+        type: String
+    },
     name: {
         type: String
     },

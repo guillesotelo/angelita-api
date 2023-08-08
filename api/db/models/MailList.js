@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const mailListSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String
     },
     email: {
@@ -15,6 +15,12 @@ const mailListSchema = new mongoose.Schema({
     },
     age: {
         type: Number | String
+    },
+    name: {
+        type: String
+    },
+    serviceId: {
+        type: String
     },
     service: {
         type: String
