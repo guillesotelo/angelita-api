@@ -65,19 +65,19 @@ router.post('/confirmPayment', async (req, res, next) => {
             if (!order) res.status(404).json({ error: 'Error updating order' })
 
             await MailList.create(order)
-        }
 
-        if (order.isEvent) {
-            const event = await Event.find({ serviceId: order.serviceId })
-            if (event) {
-                await Event.findByIdAndUpdate(event._id,
-                    { participants: event.participants + 1 },
-                    { returnDocument: "after", useFindAndModify: false })
+            if (order.isEvent) {
+                const event = await Event.find({ serviceId: order.serviceId })
+                if (event) {
+                    await Event.findByIdAndUpdate(event._id,
+                        { participants: event.participants + 1 },
+                        { returnDocument: "after", useFindAndModify: false })
+                }
             }
+            const { username, email, name } = order
+            if (name === 'Coaching') await sendPurchaseCoachingEmail(username, order, email)
+            else await sendPurchaseEmail(username, order, email)
         }
-        const { username, email, name } = order
-        if (name === 'Coaching') await sendPurchaseCoachingEmail(username, order, email)
-        else await sendPurchaseEmail(username, order, email)
 
         res.json(order)
     } catch (err) {
