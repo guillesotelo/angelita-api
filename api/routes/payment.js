@@ -58,13 +58,15 @@ router.post('/create-checkout-session', async (req, res, next) => {
 router.post('/confirmPayment', async (req, res, next) => {
     try {
         const { _id } = req.body
-        const order = await Order.findById(_id).exec()
+        const order = await Order.findById(_id)
 
         if (order && !order.isPaid) {
             await Order.findByIdAndUpdate(_id, { isPaid: true }, { returnDocument: "after", useFindAndModify: false })
             if (!order) res.status(404).json({ error: 'Error updating order' })
 
-            await MailList.create(order)
+            const newMail = { ...order }
+            delete newMail._id
+            await MailList.create(newMail)
 
             if (order.isEvent) {
                 const event = await Event.find({ serviceId: order.serviceId })
