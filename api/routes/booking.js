@@ -41,7 +41,7 @@ router.post('/create', async (req, res, next) => {
     try {
         const newBooking = await Order.create(req.body)
         if (!newBooking) return res.status(400).json('Error creating post')
-        
+
         await MailList.create(req.body)
 
         res.status(200).json(newBooking)
@@ -54,15 +54,17 @@ router.post('/create', async (req, res, next) => {
 //Update booking Data
 router.post('/update', async (req, res, next) => {
     try {
-        const { _id } = req.body
+        const { _id, sendEmail } = req.body
         let bookingData = { ...req.body }
 
         const updated = await Order.findByIdAndUpdate(_id, bookingData, { returnDocument: "after", useFindAndModify: false })
         if (!updated) return res.status(404).send('Error updating Order.')
 
-        const { username, email } = updated
-        await sendBookingUpdateEmail(username, updated, email)
-
+        if (sendEmail) {
+            const { username, email } = updated
+            await sendBookingUpdateEmail(username, updated, email)
+        }
+        
         res.status(200).json(updated)
     } catch (err) {
         console.error('Something went wrong!', err)
