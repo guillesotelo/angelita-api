@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
-const { Order, MailList } = require('../db/models')
+const { Order, MailList, Event } = require('../db/models')
 const { sendPurchaseEmail, sendPurchaseCoachingEmail } = require('../helpers/mailer')
 dotenv.config()
 const {
