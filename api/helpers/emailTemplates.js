@@ -614,7 +614,7 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
 <p style="line-height: 140%; margin-top: 20px"><span style="color: #666666; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;"><strong>Total:</strong> US $${(parseInt(data.priceInCents || 0, 10) / 100).toFixed(2)}</span></span></p>
 <p style="line-height: 140%; margin-top: 20px;"><span style="color: #d11919; line-height: 19.6px;"><span style="font-size: 18px; line-height: 25.2px;">Recuerda contactarte conmigo para coordinar la fecha de inicio. Utiliza el botón debajo.</span></span></p>
   </div>
-<a style="text-decoration: none; border: none; padding: .7rem; border-radius: .3rem; background-color: #b0bcebad" href='https://api.whatsapp.com/send/?phone=34650609282&text=Hola+Angelita%2C%0A%0AHe+reservado+el+servicio+de+Coaching+contigo+y+me+gustaría+coordinar+nuestro+primer+encuentro.%0A%0AEl ID de mi reserva es: ${data._id || ''}%0A%0AGracias.%0A&type=phone_number&app_absent=0'>Coordinar encuentro</a>
+<a style="text-decoration: none; border: none; padding: .7rem; border-radius: .3rem; background-color: #b0bcebad" href='https://api.whatsapp.com/send/?phone=34650609282&text=Hola+Angelita%2C%0A%0AHe+reservado+el+servicio+de+Coaching+contigo+y+me+gustaría+coordinar+nuestro+primer+encuentro.%0A%0AEl ID de mi reserva es: ${data._id ? data._id.substring(18) : '(sin ID)'}%0A%0AGracias.%0A&type=phone_number&app_absent=0'>Coordinar encuentro</a>
       </td>
     </tr>
   </tbody>

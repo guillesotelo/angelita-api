@@ -61,14 +61,14 @@ router.post('/confirmPayment', async (req, res, next) => {
         const order = await Order.findById(_id)
 
         if (order && !order.isPaid) {
-            await Order.findByIdAndUpdate(_id, { isPaid: true }, { returnDocument: "after", useFindAndModify: false })
-            if (!order) res.status(404).json({ error: 'Error updating order' })
+            const updated = await Order.findByIdAndUpdate(_id, { isPaid: true }, { returnDocument: "after", useFindAndModify: false })
+            if (!updated) res.status(404).json({ error: 'Error updating order' })
 
-            const newMail = { ...order }
+            const newMail = { ...updated }
             delete newMail._id
             await MailList.create(newMail)
 
-            if (order.isEvent) {
+            if (updated.isEvent) {
                 const event = await Event.find({ serviceId: order.serviceId })
                 if (event) {
                     await Event.findByIdAndUpdate(event._id,
@@ -76,12 +76,12 @@ router.post('/confirmPayment', async (req, res, next) => {
                         { returnDocument: "after", useFindAndModify: false })
                 }
             }
-            const { username, email, name } = order
+            const { username, email, name } = updated
             if (name === 'Coaching') await sendPurchaseCoachingEmail(username, order, email)
             else await sendPurchaseEmail(username, order, email)
         }
 
-        res.json(order)
+        res.json(updated)
     } catch (err) {
         console.log(err)
         res.status(500).json({ error: err.message })
