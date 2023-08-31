@@ -58,7 +58,7 @@ router.post('/create-checkout-session', async (req, res, next) => {
 router.post('/confirmPayment', async (req, res, next) => {
     try {
         const { _id } = req.body
-        const order = await Order.findById(_id)
+        let order = await Order.findById(_id)
 
         if (order && !order.isPaid) {
             const updated = await Order.findByIdAndUpdate(_id, { isPaid: true }, { returnDocument: "after", useFindAndModify: false })
@@ -68,20 +68,20 @@ router.post('/confirmPayment', async (req, res, next) => {
             delete newMail._id
             await MailList.create(newMail)
 
-            if (updated.isEvent) {
-                const event = await Event.find({ serviceId: updated.serviceId })
+            if (order.isEvent) {
+                const event = await Event.findById(order.eventId)
                 if (event) {
                     await Event.findByIdAndUpdate(event._id,
                         { participants: event.participants + 1 },
                         { returnDocument: "after", useFindAndModify: false })
                 }
             }
-            const { username, email, name } = updated
-            if (name === 'Coaching') await sendPurchaseCoachingEmail(username, updated, email)
-            else await sendPurchaseEmail(username, updated, email)
+            const { username, email, name } = order
+            if (name === 'Coaching') await sendPurchaseCoachingEmail(username, order, email)
+            else await sendPurchaseEmail(username, order, email)
         }
 
-        res.json(updated)
+        res.json(order)
     } catch (err) {
         console.log(err)
         res.status(500).json({ error: err.message })

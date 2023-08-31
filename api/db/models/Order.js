@@ -92,6 +92,9 @@ const orderSchema = new mongoose.Schema({
     isEvent: {
         type: Boolean
     },
+    eventId: {
+        type: String
+    },
     otherData: {
         type: String
     },
