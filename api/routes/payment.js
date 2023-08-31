@@ -69,7 +69,7 @@ router.post('/confirmPayment', async (req, res, next) => {
             await MailList.create(newMail)
 
             if (updated.isEvent) {
-                const event = await Event.find({ serviceId: order.serviceId })
+                const event = await Event.find({ serviceId: updated.serviceId })
                 if (event) {
                     await Event.findByIdAndUpdate(event._id,
                         { participants: event.participants + 1 },
@@ -77,8 +77,8 @@ router.post('/confirmPayment', async (req, res, next) => {
                 }
             }
             const { username, email, name } = updated
-            if (name === 'Coaching') await sendPurchaseCoachingEmail(username, order, email)
-            else await sendPurchaseEmail(username, order, email)
+            if (name === 'Coaching') await sendPurchaseCoachingEmail(username, updated, email)
+            else await sendPurchaseEmail(username, updated, email)
         }
 
         res.json(updated)
