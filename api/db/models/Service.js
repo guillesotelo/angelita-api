@@ -59,10 +59,10 @@ const serviceSchema = new mongoose.Schema({
         type: Boolean
     },
     link: {
-        type: Boolean
+        type: String
     },
     linkPassword: {
-        type: Boolean
+        type: String
     },
     otherData: {
         type: String

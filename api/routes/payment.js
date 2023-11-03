@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
 const { Order, MailList, Event } = require('../db/models')
-const { sendPurchaseEmail, sendPurchaseCoachingEmail } = require('../helpers/mailer')
+const { sendPurchaseEmail, sendPurchaseCoachingEmail, sendPurchaseEntrenamientoEmail } = require('../helpers/mailer')
 dotenv.config()
 const {
     REACT_APP_STRIPE_SECRET,
@@ -78,6 +78,7 @@ router.post('/confirmPayment', async (req, res, next) => {
             }
             const { username, email, name } = order
             if (name === 'Coaching') await sendPurchaseCoachingEmail(username, order, email)
+            else if (name === 'Entrenamiento Diario Personal') await sendPurchaseEntrenamientoEmail(username, order, email)
             else await sendPurchaseEmail(username, order, email)
         }
 
