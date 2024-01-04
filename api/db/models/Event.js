@@ -7,9 +7,6 @@ const eventSchema = new mongoose.Schema({
     serviceId: {
         type: String
     },
-    serviceId: {
-        type: String
-    },
     price: {
         type: Number
     },
