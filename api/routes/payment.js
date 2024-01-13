@@ -68,7 +68,7 @@ router.post('/confirmPayment', async (req, res, next) => {
             delete newMail._id
             await MailList.create(newMail)
 
-            if (order.isEvent) {
+            if (order.isEvent && order.eventId) {
                 const event = await Event.findById(order.eventId)
                 if (event) {
                     await Event.findByIdAndUpdate(event._id,
