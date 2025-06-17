@@ -27,11 +27,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "pm2 start && pm2 logs",
-    "dev": "nodemon index.js",
-    "build": "react-app-rewired build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "pm2 start && pm2 logs",
+    "build": "react-scripts build"
   },
   "browserslist": {
     "production": [
