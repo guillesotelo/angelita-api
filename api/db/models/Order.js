@@ -7,6 +7,9 @@ const orderSchema = new mongoose.Schema({
     name: {
         type: String
     },
+    lastName: {
+        type: String
+    },
     price: {
         type: Number
     },
@@ -42,6 +45,9 @@ const orderSchema = new mongoose.Schema({
     },
     phone: {
         type: String
+    },
+    age: {
+        type: Number
     },
     quantity: {
         type: Number
