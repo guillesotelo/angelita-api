@@ -4,6 +4,9 @@ const orderSchema = new mongoose.Schema({
     serviceId: {
         type: String
     },
+    title: {
+        type: String
+    },
     name: {
         type: String
     },
