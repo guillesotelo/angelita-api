@@ -4,6 +4,7 @@ const dotenv = require('dotenv')
 const { Order } = require('../db/models')
 const { sendBookingUpdateEmail } = require('../helpers/mailer')
 const dotenv = require('dotenv')
+const { verifyToken } = require('../helpers')
 dotenv.config()
 const { JWT_SECRET } = process.env
 
@@ -84,7 +85,7 @@ router.post('/update', async (req, res, next) => {
 })
 
 //Update booking Data
-router.post('/remove', async (req, res, next) => {
+router.post('/remove', verifyToken, async (req, res, next) => {
     try {
         const { _id } = req.body
 
