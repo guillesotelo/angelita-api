@@ -4,6 +4,7 @@ const { Order } = require('../db/models')
 const { sendBookingUpdateEmail } = require('../helpers/mailer')
 const dotenv = require('dotenv')
 const { verifyToken } = require('../helpers')
+const jwt = require('jsonwebtoken')
 dotenv.config()
 const { JWT_SECRET } = process.env
 
