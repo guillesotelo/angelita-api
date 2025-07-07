@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const dotenv = require('dotenv')
 const { Order } = require('../db/models')
 const { sendBookingUpdateEmail } = require('../helpers/mailer')
 const dotenv = require('dotenv')
