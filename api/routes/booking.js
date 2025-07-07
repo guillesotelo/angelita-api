@@ -1,8 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const dotenv = require('dotenv')
-const { Order, MailList } = require('../db/models')
+const { Order } = require('../db/models')
 const { sendBookingUpdateEmail } = require('../helpers/mailer')
+const dotenv = require('dotenv')
+dotenv.config()
+const { JWT_SECRET } = process.env
 
 //Get all bookings
 router.get('/getAll', async (req, res, next) => {
@@ -39,10 +42,18 @@ router.get('/getById', async (req, res, next) => {
 //Create new booking
 router.post('/create', async (req, res, next) => {
     try {
-        const newBooking = await Order.create(req.body)
+        const { token } = req.query
+        let isAdmin = false
+        if (token) {
+            jwt.verify(token, JWT_SECRET, (error, _) => {
+                if (!error) isAdmin = true
+            })
+        }
+        const newBooking = await Order.create({
+            ...req.body,
+            isPaid: isAdmin ? req.body.isPaid || false : false
+        })
         if (!newBooking) return res.status(400).json('Error creating post')
-
-        await MailList.create(req.body)
 
         res.status(200).json(newBooking)
     } catch (err) {
@@ -64,7 +75,7 @@ router.post('/update', async (req, res, next) => {
             const { username, email } = updated
             await sendBookingUpdateEmail(username, updated, email)
         }
-        
+
         res.status(200).json(updated)
     } catch (err) {
         console.error('Something went wrong!', err)
