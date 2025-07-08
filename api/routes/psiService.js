@@ -143,7 +143,7 @@ router.get('/createBulk', async (req, res, next) => {
     try {
         const arr = await Promise.all(SERVICES.map(async s => await PsiService.create(s)))
 
-        res.status(200).json('Bulk created', arr)
+        res.status(200).json(arr)
     } catch (err) {
         console.error('Something went wrong!', err)
         res.send(500).send('Server Error')
