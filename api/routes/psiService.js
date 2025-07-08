@@ -37,20 +37,6 @@ router.get('/getById', async (req, res, next) => {
     }
 })
 
-//Create bulk
-router.get('/createBulk', async (req, res, next) => {
-    try {
-        Promise.all(SERVICES.map(async s => {
-            return await PsiService.create(s)
-        }))
-
-        res.status(200).json('Bulk created')
-    } catch (err) {
-        console.error('Something went wrong!', err)
-        res.send(500).send('Server Error')
-    }
-})
-
 //Create new service
 router.post('/create', verifyToken, async (req, res, next) => {
     try {
