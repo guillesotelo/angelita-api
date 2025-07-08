@@ -26,7 +26,21 @@ router.get('/getById', async (req, res, next) => {
     try {
         const { _id } = req.query
         const service = await PsiService.findById(_id)
-        if (!service) return res.status(404).send('Post not found.')
+        if (!service) return res.status(404).send('Service not found.')
+
+        res.status(200).json(service)
+    } catch (err) {
+        console.error('Something went wrong!', err)
+        res.send(500).send('Server Error')
+    }
+})
+
+//Get service by slug
+router.get('/getBySlug', async (req, res, next) => {
+    try {
+        const { slug } = req.query
+        const service = await PsiService.findOne({ slug })
+        if (!service) return res.status(404).send('Service not found.')
 
         res.status(200).json(service)
     } catch (err) {
@@ -39,7 +53,7 @@ router.get('/getById', async (req, res, next) => {
 router.post('/create', verifyToken, async (req, res, next) => {
     try {
         const newservice = await PsiService.create(req.body)
-        if (!newservice) return res.status(400).json('Error creating post')
+        if (!newservice) return res.status(400).json('Error creating service')
 
         res.status(200).json(newservice)
     } catch (err) {
