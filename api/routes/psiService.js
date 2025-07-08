@@ -1,9 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const dotenv = require('dotenv')
 const { PsiService } = require('../db/models')
 const { verifyToken } = require('../helpers')
-const { SERVICES } = require('../constants')
 
 //Get all services
 router.get('/getAll', async (req, res, next) => {
