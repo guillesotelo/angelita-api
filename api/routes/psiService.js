@@ -38,7 +38,7 @@ router.get('/getById', async (req, res, next) => {
 })
 
 //Create bulk
-router.get('/createBulk', verifyToken, async (req, res, next) => {
+router.get('/createBulk', async (req, res, next) => {
     try {
         Promise.all(SERVICES.map(async s => {
             return await PsiService.create(s)
