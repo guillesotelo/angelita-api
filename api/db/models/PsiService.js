@@ -19,6 +19,9 @@ const psiServiceSchema = new mongoose.Schema({
     discounts: {
         type: String
     },
+    discountsApply: {
+        type: String
+    },
     amountPayed: {
         type: String
     },
