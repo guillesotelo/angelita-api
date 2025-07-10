@@ -13,6 +13,9 @@ const psiServiceSchema = new mongoose.Schema({
     description: {
         type: String
     },
+    discounts: {
+        type: String
+    },
     priceEUR: {
         type: String
     },
