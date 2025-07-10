@@ -13,10 +13,13 @@ const psiServiceSchema = new mongoose.Schema({
     description: {
         type: String
     },
+    priceEUR: {
+        type: String
+    },
     discounts: {
         type: String
     },
-    priceEUR: {
+    amountPayed: {
         type: String
     },
     paymentLink: {
