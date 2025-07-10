@@ -107,6 +107,10 @@ const orderSchema = new mongoose.Schema({
     otherData: {
         type: String
     },
+    hasBookedBefore: {
+        type: Boolean,
+        default: false
+    },
     removed: {
         type: Boolean,
         default: false

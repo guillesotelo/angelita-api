@@ -44,15 +44,21 @@ router.get('/getById', async (req, res, next) => {
 router.post('/create', async (req, res, next) => {
     try {
         const { token } = req.query
+        const { email } = req.body
+
         let isAdmin = false
         if (token) {
             jwt.verify(token, JWT_SECRET, (error, _) => {
                 if (!error) isAdmin = true
             })
         }
+        const previousBooking = await Order.findOne({ email })
+        const hasBookedBefore = previousBooking ? true : false
+
         const newBooking = await Order.create({
             ...req.body,
-            isPaid: isAdmin ? req.body.isPaid || false : false
+            isPaid: isAdmin ? req.body.isPaid || false : false,
+            hasBookedBefore
         })
         if (!newBooking) return res.status(400).json('Error creating post')
 
